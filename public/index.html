@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LAN Chess</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">&#9822;&#xFE0E;</span> LAN Chess</div>
+    <div id="conn" class="conn"></div>
+  </header>
+
+  <main>
+    <!-- Lobby -->
+    <section id="lobby" class="screen">
+      <div class="lobby">
+        <h1>Play chess with someone on your network</h1>
+        <label class="name-field">Your name
+          <input id="name" maxlength="20" placeholder="Player" autocomplete="off">
+        </label>
+        <div class="lobby-grid">
+          <div class="card opt">
+            <h2>Host a game</h2>
+            <p>Create a game and share the code with a friend on the same Wi-Fi.</p>
+            <div class="seg" id="color-pick">
+              <button data-color="w">White</button>
+              <button data-color="r" class="on">Random</button>
+              <button data-color="b">Black</button>
+            </div>
+            <button id="btn-create" class="primary">Create game</button>
+          </div>
+          <div class="card opt">
+            <h2>Join a game</h2>
+            <p>Type the 4-letter code shown on your friend's screen.</p>
+            <input id="join-code" maxlength="4" placeholder="ABCD" autocomplete="off" class="code-input">
+            <button id="btn-join" class="primary">Join game</button>
+          </div>
+          <div class="card opt">
+            <h2>Same computer</h2>
+            <p>Pass-and-play with two people at one screen.</p>
+            <button id="btn-local">Start local game</button>
+          </div>
+        </div>
+        <div id="lobby-err" class="err"></div>
+        <div id="lan-info" class="lan-info"></div>
+      </div>
+    </section>
+
+    <!-- Waiting for opponent -->
+    <section id="waiting" class="screen hidden">
+      <div class="card waiting">
+        <h2>Waiting for an opponent…</h2>
+        <p>Tell your friend to open this address and enter the code:</p>
+        <div id="wait-links" class="wait-links"></div>
+        <div id="wait-code" class="big-code"></div>
+        <p class="muted">You're playing <b id="wait-color"></b>. The game starts as soon as they join.</p>
+        <button id="btn-cancel-wait">Back to lobby</button>
+      </div>
+    </section>
+
+    <!-- Game / review -->
+    <section id="game" class="screen hidden">
+      <div class="table">
+        <div id="evalbar" class="evalbar hidden" title="Evaluation">
+          <div class="evalfill"></div><span class="evaltext"></span>
+        </div>
+        <div class="board-col">
+          <div class="player-row" id="top-player"></div>
+          <div id="board-wrap" class="board-wrap"></div>
+          <div class="player-row" id="bottom-player"></div>
+        </div>
+
+        <aside class="panel" id="play-panel">
+          <div id="status" class="status"></div>
+          <div id="draw-banner" class="banner hidden">
+            <span>Your opponent offers a draw.</span>
+            <button id="btn-draw-accept" class="primary small">Accept</button>
+            <button id="btn-draw-decline" class="small">Decline</button>
+          </div>
+          <div id="move-list" class="move-list"></div>
+          <div class="actions" id="play-actions">
+            <button id="btn-draw">Offer draw</button>
+            <button id="btn-resign" class="danger">Resign</button>
+            <button id="btn-flip" title="Flip board">Flip board</button>
+          </div>
+          <div class="actions hidden" id="over-actions">
+            <button id="btn-review" class="primary">Game review</button>
+            <button id="btn-rematch">Rematch</button>
+            <button id="btn-pgn">Copy PGN</button>
+            <button id="btn-lobby">Lobby</button>
+          </div>
+        </aside>
+
+        <aside class="panel hidden" id="review-panel">
+          <div class="review-head">
+            <h2>Game review</h2>
+            <select id="review-depth" title="Analysis strength">
+              <option value="300">Fast</option>
+              <option value="900" selected>Normal</option>
+              <option value="2500">Deep</option>
+            </select>
+            <button id="btn-reanalyze" class="small">Re-run</button>
+          </div>
+          <div id="review-progress" class="progress"><div></div><span></span></div>
+          <div id="review-summary" class="summary"></div>
+          <svg id="eval-graph" class="eval-graph" viewBox="0 0 300 70" preserveAspectRatio="none"></svg>
+          <div id="review-comment" class="comment"></div>
+          <div class="nav">
+            <button id="rv-first" title="Start">&#9198;&#xFE0E;</button>
+            <button id="rv-prev" title="Previous (←)">&#9664;&#xFE0E;</button>
+            <button id="rv-next" title="Next (→)">&#9654;&#xFE0E;</button>
+            <button id="rv-last" title="End">&#9197;&#xFE0E;</button>
+            <button id="rv-mistake" title="Jump to the next mistake">Next mistake</button>
+          </div>
+          <label class="check"><input type="checkbox" id="rv-show-best" checked> Show the engine's best move for this position</label>
+          <div id="review-moves" class="move-list review"></div>
+          <div class="actions">
+            <button id="btn-back-game">Back to game</button>
+            <button id="btn-flip2">Flip board</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <div id="modal" class="modal hidden"><div class="modal-card" id="modal-card"></div></div>
+  <div id="promo" class="modal hidden"><div class="modal-card promo-card" id="promo-card"></div></div>
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="js/chess.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
